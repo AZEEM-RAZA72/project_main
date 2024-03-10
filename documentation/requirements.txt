@@ -6,3 +6,4 @@ vosk
 langid
 nltk
 language_tool_python
+happytransformer

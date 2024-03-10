@@ -1,10 +1,17 @@
+from flask import Flask, Response, render_template
 import queue
 import sys
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
-import langid
+from gramformer import Gramformer
+import spacy
+
+app = Flask(__name__)
 
 q = queue.Queue()
+
+gf = Gramformer(models=1, use_gpu=False) # 0 = detector, 1 = highlighter, 2 = corrector, 3 = all
+nlp=spacy.load('en_core_web_lg')
 
 def int_or_str(text):
     """Helper function for argument parsing."""
@@ -24,18 +31,17 @@ def list_audio_devices():
     print(sd.query_devices())
     sys.exit(0)
 
-def detect_language(text):
-    # Used langid library to detect language
-    lang, _ = langid.classify(text)
-    return lang
+    
 
-def setup_recording(filename=None, device=None, samplerate=None, supported_languages=["en", "hi"]):
+def setup_recording(filename=None, device=None, samplerate=None, model_lang="en-us"):
     """Set up recording parameters and start recording loop."""
-    try:
+    try:        
+
         if samplerate is None:
             device_info = sd.query_devices(device, "input")
             samplerate = int(device_info["default_samplerate"])
 
+        model = Model(lang=model_lang)
 
         if filename:
             dump_fn = open(filename, "wb")
@@ -48,19 +54,16 @@ def setup_recording(filename=None, device=None, samplerate=None, supported_langu
             print("Press Ctrl+C to stop the recording")
             print("#" * 80)
 
+            rec = KaldiRecognizer(model, samplerate)
             while True:
                 data = q.get()
-                # Detect language of the speech
-                detected_lang = detect_language(data)
-
-                if detected_lang in supported_languages:
-                    model = Model(lang=detected_lang)
-                    rec = KaldiRecognizer(model, samplerate)
-
-                    if rec.AcceptWaveform(data):
-                        print(rec.Result())
-                    else:
-                        print(rec.PartialResult())
+                if rec.AcceptWaveform(data):
+                    result = rec.Result()
+                    print(result)
+                    yield result  # Yield the result as a server-sent event
+                    corrected_text = get_grammar_correction(result)
+                    yield corrected_text
+                
                 if dump_fn is not None:
                     dump_fn.write(data)
 
@@ -70,6 +73,23 @@ def setup_recording(filename=None, device=None, samplerate=None, supported_langu
     except Exception as e:
         sys.exit(type(e).__name__ + ": " + str(e))
 
+def get_grammar_correction(text):
+    try:
+        correct_text = gf.correct(text)
+        return correct_text
+    except Exception as e:
+        return str(e)
+    
+@app.route('/stream_audio')
+def stream_audio():
+    print('Starting audio stream')
+    return Response(setup_recording(), content_type='text/event-stream')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+
 if __name__ == "__main__":
-    # Example usage
-    setup_recording()
+    app.run(debug=True)

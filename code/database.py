@@ -1,6 +1,6 @@
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, DateTime, String
+from sqlalchemy import Column, Integer, DateTime, String, ForeignKey
 from datetime import datetime
 
 #create model class
@@ -17,7 +17,16 @@ class User(Base):
     def __str__(self):
         return self.username
     
+
+class File(Base):
+     __tablename__ = 'files'
+     id = Column(Integer, primary_key=True)
+     path = Column(String(255), nullable=False)
+     user_id = Column(Integer, ForeignKey('users.id'))
+     created_at = Column(DateTime, default=datetime.now)
+
 #more classes for other tables
+     
 #utility functions
 def open_db():
         engine = create_engine('sqlite:///project.db',echo=True)
