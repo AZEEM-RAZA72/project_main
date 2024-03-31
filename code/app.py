@@ -35,17 +35,17 @@ def register():
         add_to_db(user)
     return render_template('register.html')
 
-@app.route('file/upload/', methods=['GET', 'POST'])
+'''@app.route('/file/upload/', methods=['GET', 'POST'])
 def file_upload():
-    return render_template('upload.html')
+    return render_template('upload.html')'''
 
-@app.route('/file/list', methods=['GET', 'POST'])
+'''@app.route('/file/list', methods=['GET', 'POST'])
 def file_list():
     return render_template('display_list.html')
-
-@app.route('file/<int:file_id>/view')
+'''
+'''@app.route('/file/<int:file_id>/view')
 def func_name(id):
-    return render_template('view_file.html')
+    return render_template('view_file.html')'''
 
 
 if __name__ == '__main__':

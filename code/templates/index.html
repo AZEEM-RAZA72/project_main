@@ -1,37 +1,57 @@
-{% extends 'layout/base.html' %}
-{% block content %}
-<h1>Home</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinguaEase</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="logo">LinguaEase</a>
+                <ul class="nav-links">
+                    <li><a href="/register">Register</a></li>
+                    <li><a href="/login">Log In</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-<iframe src="/stream_audio" id="textout"></iframe>
-<div id="cleanout">
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Learn speaking languages online with <span class="highlight">LinguaEase</span></h1>
+                <p>Start speaking a language with confidence today. Choose  languages and lessons.</p>
+                <img src="/static/enflag.svg" alt="" class="img-rounded">
+                <img src="/static/briati_icon.jpeg" alt="" class="img-rounded">
+                <a href="#" class="cta-button">Start speaking</a>
+            </div>
+        </div>
+    </section>
 
-</div>
-{% endblock %}
-
-{% block js %}
-<script>
-    let cleanout = document.querySelector('#cleanout')
-    let iframe = document.querySelector('#textout')
-    function updateCleanout(){
-        try {
-            const out = iframe.contentWindow.document.querySelector('pre')
-            const preContent =out.textContent
-            const jsonArray = `[${preContent.replace(/}{/g, '},{')}]`;
-            const values = JSON.parse(jsonArray).map(obj => obj.text);
-            const concatenatedString = values.join(' ');
-
-            // Log the concatenated string
-            iframe.style.display = 'none'
-            console.log(concatenatedString);
-            cleanout.textContent = concatenatedString
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    updateCleanout()
-    // Set up an interval to update every 5 seconds
-    setInterval(updateCleanout, 1000);
-</script>
-{% endblock %}
+    <section class="features">
+        <div class="container">
+            <h2>Why learn with LinguaEase?</h2>
+            <div class="feature">
+                <img src="https://via.placeholder.com/150" alt="Feature 1">
+                <h3>Expertly created courses</h3>
+                <p>Our language courses are created by our expert linguists. You'll learn the real language, as it's spoken by native speakers.</p>
+            </div>
+            <div class="feature">
+                <img src="https://via.placeholder.com/150" alt="Feature 2">
+                <h3>Personalized learning</h3>
+                <p>Our adaptive learning technology tailors your learning plan to suit your goals, keeping you motivated every step of the way.</p>
+            </div>
+            <div class="feature">
+                <img src="https://via.placeholder.com/150" alt="Feature 3">
+                <h3>Interactive exercises</h3>
+                <p>Practice your speaking, writing, listening, and reading skills with interactive exercises and quizzes.</p>
+            </div>
+        </div>
+    </section>
 
 
+</body>
+</html>

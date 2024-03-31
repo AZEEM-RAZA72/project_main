@@ -1,102 +1,102 @@
-import argparse
+from flask import Flask, Response, render_template, request, jsonify
 import queue
 import sys
 import sounddevice as sd
 from vosk import Model, KaldiRecognizer
+import warnings
+import time
+import json
+from gramformer import Gramformer
 
+app = Flask(__name__)
+
+# Initialize Gramformer and other variables
+gf = Gramformer(models=2, use_gpu=False)  # Initialize LLAMA 2 for grammar correction
 q = queue.Queue()
+recording = False
+last_audio_time = time.time()   # Initialize the last_audio_time variable with the current time
 
-def int_or_str(text):
-    """Helper function for argument parsing."""
-    try:
-        return int(text)
-    except ValueError:
-        return text
-
-def callback(indata, frames, time, status):
+def callback(indata, frames, timestamp, status):
     """This is called (from a separate thread) for each audio block."""
+    global last_audio_time
     if status:
         print(status, file=sys.stderr)
     q.put(bytes(indata))
+    last_audio_time = time.time()  # Update last_audio_time each time audio data is received
 
-def list_audio_devices():
-    """List available audio devices and exit."""
-    print(sd.query_devices())
-    sys.exit(0)
-
-def setup_parser():
-    """Set up and configure the argument parser."""
-    parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument(
-        "-l", "--list-devices", action="store_true",
-        help="show list of audio devices and exit")
-    args, remaining = parser.parse_known_args()
-    
-    if args.list_devices:
-        list_audio_devices()
-    
-    parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        parents=[parser])
-    
-    parser.add_argument(
-        "-f", "--filename", type=str, metavar="FILENAME",
-        help="audio file to store recording to")
-    parser.add_argument(
-        "-d", "--device", type=int_or_str,
-        help="input device (numeric ID or substring)")
-    parser.add_argument(
-        "-r", "--samplerate", type=int, help="sampling rate")
-    parser.add_argument(
-        "-m", "--model", type=str, help="language model; e.g. en-us, fr, nl; default is en-us")
-    
-    return parser.parse_args(remaining)
-
-# ... (previous code)
-
-def setup_recording(args):
-    """Set up recording parameters and start recording loop."""
+# Function to correct grammar using Gramformer (LLAMA 2)
+def get_grammar_correction(text):
     try:
-        if args.samplerate is None:
-            device_info = sd.query_devices(args.device, "input")
-            args.samplerate = int(device_info["default_samplerate"])
+        print('Correcting grammar...')
+        corrected_text = gf.correct(text)
+        return corrected_text
+    except Exception as e:
+        print('Error in get_grammar_correction:', e)
+        return text
 
-        if args.model is None:
-            model = Model(lang="en-us")
-        else:
-            model = Model(lang=args.model)
+# Function to set up recording parameters and start recording loop
+def setup_recording(filename=None, device=None, samplerate=None, model_lang="en-us"):
+    """Set up recording parameters and start recording loop."""
+    global last_audio_time
+    try:        
+        if samplerate is None:
+            device_info = sd.query_devices(device, "input")
+            samplerate = int(device_info["default_samplerate"])
 
-        if args.filename:
-            dump_fn = open(args.filename, "wb")
+        model = Model(lang=model_lang)
+
+        if filename:
+            dump_fn = open(filename, "wb")
         else:
             dump_fn = None
 
-        with sd.RawInputStream(samplerate=args.samplerate, blocksize=8000, device=args.device,
-                dtype="int16", channels=1, callback=callback):
+        with sd.RawInputStream(samplerate=samplerate, blocksize=8000, device=device,
+                               dtype="int16", channels=1, callback=callback):
             print("#" * 80)
             print("Press Ctrl+C to stop the recording")
             print("#" * 80)
 
-            rec = KaldiRecognizer(model, args.samplerate)
+            rec = KaldiRecognizer(model, samplerate)
             while True:
                 data = q.get()
                 if rec.AcceptWaveform(data):
-                    print(rec.Result())
-                else:
-                    print(rec.PartialResult())
-                if dump_fn is not None:
-                    dump_fn.write(data)
+                    result = rec.Result()
 
+                    # Correct text using Gramformer (LLAMA 2)
+                    corrected_text = get_grammar_correction(result)  
+                    if len(corrected_text) > 0:
+                        yield corrected_text 
+                    else:
+                        yield result
+                
+                if time.time() - last_audio_time > 10:
+                    print("Silence detected, stopping recording...")
+                    recording = False
+                    break
     except KeyboardInterrupt:
         print("\nDone")
         sys.exit(0)
     except Exception as e:
-        sys.exit(type(e).__name__ + ": " + str(e))
+        print('Error in setup_recording:', e)
+        return jsonify({'error': str(e)})
 
-# ... (rest of the code)
+# Route to stream audio
+@app.route('/stream_audio')
+def stream_audio():
+    global recording
+    print('Starting audio stream')
+    recording = True
+    try:
+        recording_generator = setup_recording()
+        return Response(recording_generator, content_type='text/event-stream')
+    except Exception as e:
+        print('Error in stream_audio:', e)
+        return jsonify({'error': str(e)})
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 if __name__ == "__main__":
-    args = setup_parser()
-    print(args)
-    setup_recording(args)
+    with app.app_context():  # Wrap operations that require the application context
+        app.run(debug=True)
