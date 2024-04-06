@@ -46,17 +46,22 @@ def register():
         print(username,email,password,cpassword)
        
         if len(username)==0 or len(email)==0 or len(password)==0 or len(cpassword)==0:
-            flash("All fields are required", 'error')
+            flash("All fields are required", 'error')   
             return redirect('/register') #reload the page
         try:
             user=User(username=username, email=email, password=password)
-            add_db(user)
+            add_to_db(user)
             flash("Account created", 'success')
-            return redirect('/')
+            return redirect('/login')
         except Exception as e:
             flash(f"Error {e}", 'error')
             return redirect('/register')
     return render_template('register.html')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 if __name__ == "__main__":
     app.run(debug=True)

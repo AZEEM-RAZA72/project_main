@@ -30,15 +30,29 @@ header {
     text-decoration: none;
 }
 
-.nav-links {
+/* .nav-links {
     list-style: none;
     display: flex;
 }
 
 .nav-links li {
-    margin-right: 20px;
+    position: absolute;
+    right: 0;
+    top: 0%; 
+   
 }
-
+ */
+ .nav-links {
+    list-style: none; /* Remove default bullet points */
+    margin-right: 30; /* Reset default margins */
+    padding: 10; /* Reset default padding */
+    display: inline-block; /* Enable flexbox for easy alignment */
+    float: right; /* Align items to the right */
+  }
+  
+  .nav-links li {
+    margin-left: 30px; /* Add spacing between list items */
+  }
 .nav-links li a {
     text-decoration: none;
     color: #666;
@@ -105,4 +119,15 @@ footer {
     padding: 20px 0;
     text-align: center;
     margin-top: 50px;
+}
+.image-container {
+    display: flex; /* Use flexbox to align items in a row */
+    justify-content: space-around; /* Space evenly between the images */
+    align-items: center; /* Center items vertically */
+}
+
+.img-rounded {
+    border-radius: 50%; /* Make images round */
+    width: 100px; /* Adjust the width as needed */
+    height: 100px; /* Adjust the height as needed */
 }

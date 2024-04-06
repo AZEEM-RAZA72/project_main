@@ -16,7 +16,8 @@ def login():
         password = request.form.get('password')
         print("Email =>", email)
         print("Password =>", password)
-        # logic
+
+        
     return render_template('login.html')
 
 @app.route('/register', methods=['GET', 'POST'])
