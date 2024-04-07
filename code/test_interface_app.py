@@ -1,5 +1,6 @@
 from flask import Flask, render_template, redirect, request, flash,session
 from database import User, add_to_db, open_db
+from myllm import query
 
 app = Flask(__name__)
 app.secret_key = 'thisissupersecrectkeyforsample'
@@ -7,7 +8,7 @@ app.secret_key = 'thisissupersecrectkeyforsample'
 @app.route("/")
 def index():
     # You can fetch language options from a database or a list
-    languages = ["English", "Spanish", "French", "German", "Italian"]
+    languages = ["American English", "Australian English", "British English"]
     return render_template("index.html", languages=languages)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -58,10 +59,25 @@ def register():
             return redirect('/register')
     return render_template('register.html')
 
+@app.route('/train', methods=['GET', 'POST'])
+def train():
+    if 'isauth' not in session or not session.get('isauth'):
+        return redirect('/login')
+    if request.method == 'POST':
+        chapter = request.form.get('chapter') 
+        print(chapter)
+        result = query(chapter)
+        print(result.text)
+        return render_template('train.html', result=result.text)
+
+    return render_template('train.html')
+
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect('/')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

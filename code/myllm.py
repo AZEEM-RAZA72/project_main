@@ -7,8 +7,8 @@ def query(question):
     prompt = f'''
     You are my english grammer expert. You are going to help me with my english grammer.
     the question is {question}
-    Give me some common ways to introduce yourself in English.
-    output format = Html
+    Give me paragraph of to introduce yourself in English auto fill the fields.
+    format=html
     '''
     generation_config = {
         "temperature": 0.9,

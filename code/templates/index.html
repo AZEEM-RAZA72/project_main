@@ -15,8 +15,8 @@
                 <a href="#" class="logo">LinguaEase</a>
                 <ul class="nav-links">
                     {% if session.isauth %}
-                    <a href="/profile">Profile</a>
-                    <a href="/logout">Log Out</a>
+                    <a href="/profile" class="cta-button">Profile</a>
+                    <a href="/logout"  class="cta-button">Log Out</a>
                     {% else %}
                     <a href="/register">Register</a>
                     <a href="/login">Log In</a>
@@ -42,13 +42,32 @@
                 <h1>Learn speaking languages online with <span class="highlight">LinguaEase</span></h1>
                 <p>Start speaking a language with confidence today. Choose languages and lessons.</p>
                 <div class="image-container">
-                    <img src="/static/america.jpg" alt="" class="img-rounded">
-                    <img src="/static/britain_icon.jpg" alt="" class="img-rounded">
-                    <img src="/static/australia.jpg" alt="" class="img-rounded">
-                </div>
+                    <a href="/train">
+                        <img src="/static/america.jpg" alt="" class="img-rounded">
+                    </a>
 
-                <a href="#" class="cta-button">Start speaking</a>
-            </div>
+                    <a href="/train">
+                        <img src="/static/britain.jpg" alt="" class="img-rounded">
+                    </a>
+                    <a href="/train">
+                        <img src="/static/australia.jpg" alt="" class="img-rounded">
+                    </a>
+
+                    <a href="/train">
+                    <img src="/static/indian.jpeg" alt="" class="img-rounded">
+                    </a>
+
+                    <a href="/train">
+                    <img src="/static/Russian.jpeg" alt="" class="img-rounded">
+                    </a>
+
+                    <a href="/train">
+                    <img src="/static/Spanish.jpeg" alt="" class="img-rounded">
+                    </a>
+                <!-- </div>
+
+                <a href="/train" class="cta-button">Start speaking</a>
+            </div> -->
         </div>
     </section>
 

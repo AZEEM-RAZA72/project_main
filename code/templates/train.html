@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative Text</title>
+    <script src="https://unpkg.com/htmx.org@1.9.11"
+        integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0"
+        crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #64f864;
+            margin-bottom: 20px;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            overflow: hidden;
+            background-color: #333;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+        }
+
+        /* Steps Section */
+        .step {
+            margin-bottom: 30px;
+        }
+
+        .step h2 {
+            margin-bottom: 15px;
+            color: #64f864;
+        }
+
+        /* Textarea and Input */
+        textarea,
+        #correctionBox {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Round Play Button */
+        #playButton {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #playButton:hover {
+            background-color: #0056b3;
+        }
+
+        /* Audio Controls */
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .volume-slider {
+            width: 150px;
+            margin-left: 10px;
+        }
+
+        /* Next Button */
+        #nextButton {
+            background-color: #64f864;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #nextButton:hover {
+            background-color: #64f864;
+        }
+
+        /* Option Menu */
+        #optionMenu {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .htmx-indicator {
+            opacity: 0;
+            transition: opacity 500ms ease-in;
+            width: 100px;
+            height: 100px;
+
+        }
+
+        .htmx-request .htmx-indicator {
+            opacity: 1;
+
+        }
+
+        .htmx-request.htmx-indicator {
+            opacity: 1
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="#">About</a>
+    </div>
+    <div class="container">
+        <h1>Start HERE!</h1>
+        <form hx-post="/train" hx-target="body" hx-swap="outerHTML" hx-indicator="#spinner">
+            <img id="spinner" class="htmx-indicator" src="/static/bouncing-circles.svg" />
+            <select id="optionMenu" name="chapter">
+                <option value="introduction">Introducing Yourself and Others</option>
+                <option value="greetings">Greetings</option>
+                <option value="goodbye">Saying Goodbye</option>
+                <option value="apologies">Making Apologies</option>
+                <option value="thankyou">Thank You</option>
+            </select>
+            <input type="submit" value="Generate">
+        </form>
+        <div class="step">
+            <h2> Generated Text</h2>
+            <p class="lead result">{{result|safe}}</p>
+        </div>
+        <div class="step">
+            <h2> Play Generated Text</h2>
+            <button id="playButton">▶</button>
+            <div class="audio-controls">
+                <input type="range" class="volume-slider" min="0" max="100" value="50">
+                <button id="volumeUp">+</button>
+                <button id="volumeDown">-</button>
+            </div>
+        </div>
+        <div class="step">
+            <h2> User Input</h2>
+            <textarea id="userInput"></textarea>
+        </div>
+        <div class="step">
+            <h2> Correction Box</h2>
+            <div id="correctionBox" contenteditable="true"></div>
+        </div>
+        <div class="next-button">
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <script>
+        var converter = new showdown.Converter();
+        var resultArea = document.querySelector('.result')
+        document.addEventListener('htmx:afterRequest', function (evt) {
+            var html = converter.makeHtml(resultArea.innerHTML)
+            console.log(html)
+            resultArea.innerHTML = html;
+        })
+    </script>
+</body>
+
+</html>
