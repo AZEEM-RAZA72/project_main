@@ -5,10 +5,10 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 # Set up the model
 def query(question):
     prompt = f'''
-    You are my english grammer expert. You are going to help me with my english grammer.
-    the question is {question}
-    Give me paragraph of to introduce yourself in English auto fill the fields.
-    format=html
+    The question is {question}
+    Now generate 100 words paragraph examples to introduce yourself in English.
+    Remove special characters.
+    format=<!Doctype HTML>
     '''
     generation_config = {
         "temperature": 0.9,
@@ -47,7 +47,7 @@ def query(question):
     return response
 
 if __name__ == "__main__":
-    q = '''Self Introduction – Different ways to introduce “myself” (and others) in English
-There are many different ways to introduce yourself and other people in English.'''
+    q = '''Self Introduction in English
+ Introduce yourself in English.'''
     ans = query(q)
     print(ans.text)
