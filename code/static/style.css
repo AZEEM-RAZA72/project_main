@@ -72,7 +72,7 @@ header {
 
 /* Hero section styles */
 .hero {
-    background-image: 
+    background-image: '/static/speaking_people.jpg';
     background-size: cover;
     color: #aeeb69;
     padding: 100px 0;
@@ -124,10 +124,17 @@ footer {
     display: flex; /* Use flexbox to align items in a row */
     justify-content: space-around; /* Space evenly between the images */
     align-items: center; /* Center items vertically */
+    background-image: ;
 }
 
 .img-rounded {
     border-radius: 50%; /* Make images round */
     width: 100px; /* Adjust the width as needed */
     height: 100px; /* Adjust the height as needed */
+}
+
+.icon span {
+    display: block;
+    font-size: 14;
+
 }

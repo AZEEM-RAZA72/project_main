@@ -101,7 +101,8 @@
             display: flex;
             align-items: center;
             margin-top: 10px;
-            display: flex; /* Changed display property to flex */
+            display: flex;
+            /* Changed display property to flex */
         }
 
         .volume-slider {
@@ -163,7 +164,7 @@
     </div>
     <div class="container">
         <h1>Start HERE!</h1>
-        <form hx-post="/train" hx-target="body" hx-swap="outerHTML" hx-indicator="#spinner">
+        <form hx-post="/train" hx-target="body" hx-swap="innerHTML" hx-indicator="#spinner">
             <img id="spinner" class="htmx-indicator" src="/static/bouncing-circles.svg" />
             <select id="optionMenu" name="chapter">
                 <option value="introduction">Introducing Yourself </option>
@@ -181,7 +182,7 @@
         <div class="step">
             <h2> Play Generated Text</h2>
             <div class="audio-controls">
-                <button id="playButton" label ="Play">▶</button>
+                <button id="playButton" label="Play">▶</button>
                 <input type="range" class="volume-slider" min="0" max="100" value="50">
                 <button id="volumeDown">-</button>
                 <button id="volumeUp">+</button>
@@ -203,46 +204,48 @@
     <script>
         var converter = new showdown.Converter();
         var resultArea = document.querySelector('.result')
+        var content = ""
         document.addEventListener('htmx:afterRequest', function (evt) {
             var html = converter.makeHtml(resultArea.innerHTML)
             console.log(html)
             resultArea.innerHTML = html;
+            content = document.querySelector('.step').innerHTML
+            content = content.replace(/<[^>]*>/g, "");
         });
         // Get the play button
-    var playButton = document.getElementById('playButton');
-       
+        var playButton = document.getElementById('playButton');
         // Add an event listener to the play button
-        playButton.addEventListener('click', function() {
-            // Get the content of the result element
-            var generatedText = document.querySelector('.result').textContent; // Use textContent to get only the text content
-
-            // Create a new SpeechSynthesisUtterance object with the generated text
-            var utterance = new SpeechSynthesisUtterance(generatedText);
-    
-            // Use the speech synthesis API to speak the generated text
+        playButton.addEventListener('click', function () {
+            // Cancel any previously speaking
+            window.speechSynthesis.cancel();
+            console.log(resultArea.innerHTML)
+            // Iterate over the NodeList of .result element
+            // Create a new SpeechSynthes isUtterance object with the result text
+            var utterance = new SpeechSynthesisUtterance(resultArea.innerHTML);
+            // Use the speech synthesis API to speak the result text
             window.speechSynthesis.speak(utterance);
-        });
-        // Get volume slider and volume buttons
-    var volumeSlider = document.querySelector('.volume-slider');
-    var volumeUpButton = document.getElementById('volumeUp');
-    var volumeDownButton = document.getElementById('volumeDown');
 
-    // Function to increase volume
-    volumeUpButton.addEventListener('click', function() {
+        });
+        var volumeSlider = document.querySelector('.volume-slider');
+        var volumeUpButton = document.getElementById('volumeUp');
+        var volumeDownButton = document.getElementById('volumeDown');
+
+        // Function to increase volume
+        volumeUpButton.addEventListener('click', function () {
             if (volumeSlider.value < 100) {
                 volumeSlider.value = parseInt(volumeSlider.value) + 10; // Increase volume by 10
 
             }
         });
         // Function to decrease volume
-        volumeDownButton.addEventListener('click', function() {
+        volumeDownButton.addEventListener('click', function () {
             if (volumeSlider.value > 0) {
                 volumeSlider.value = parseInt(volumeSlider.value) - 10; // Decrease volume by 10
             }
         });
-        volumeSlider.addEventListener('input', function() {
+        volumeSlider.addEventListener('input', function () {
             audioElement.volume = volumeSlider.value / 100; // Convert the slider value to a value between 0 and 1
-});
+        });
     </script>
 </body>
 
