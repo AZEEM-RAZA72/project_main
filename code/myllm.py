@@ -6,7 +6,7 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 def query(question):
     prompt = f'''
     The question is {question}
-    Now generate 100 words paragraph examples to introduce yourself in English.
+    Now generate 100 words paragraph example sentences to introduce yourself in English.
     Remove special characters.
     format=<!Doctype HTML>
     '''

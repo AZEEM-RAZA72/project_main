@@ -205,26 +205,48 @@
         var converter = new showdown.Converter();
         var resultArea = document.querySelector('.result')
         var content = ""
+
+        // Function to extract content from specific tag
+        function extractContent(tagName) {
+            var elements = document.getElementsByTagName(tagName);
+            var contentArray = [];
+            for (var i = 0; i < elements.length; i++) {
+                contentArray.push(elements[i].textContent.trim());
+            }
+            return contentArray.join(' '); // Join array elements into a single string
+        }
+
         document.addEventListener('htmx:afterRequest', function (evt) {
-            var html = converter.makeHtml(resultArea.innerHTML)
-            console.log(html)
+            var html = converter.makeHtml(resultArea.innerHTML);
             resultArea.innerHTML = html;
-            content = document.querySelector('.step').innerHTML
-            content = content.replace(/<[^>]*>/g, "");
+            content = extractContent('p'); // Extract content from <p> tag
+            console.log("Content from <p> tag:", content);
+            console.log("content updated")
         });
+
+        // document.addEventListener('htmx:afterRequest', function (evt) {
+        //     var html = converter.makeHtml(resultArea.innerHTML)
+        //     resultArea.innerHTML = html;
+        //     content = document.querySelector('.step').innerHTML
+        //     content = content.replace(/<[^>]*>/g, "");
+        // });
+
         // Get the play button
         var playButton = document.getElementById('playButton');
+
         // Add an event listener to the play button
         playButton.addEventListener('click', function () {
+            console.log("loading content")
             // Cancel any previously speaking
+            content = extractContent('p')
+            console.log("Content from <p> tag in play:", content);
             window.speechSynthesis.cancel();
-            console.log(resultArea.innerHTML)
+            console.log(content)
             // Iterate over the NodeList of .result element
             // Create a new SpeechSynthes isUtterance object with the result text
-            var utterance = new SpeechSynthesisUtterance(resultArea.innerHTML);
+            var utterance = new SpeechSynthesisUtterance(content);
             // Use the speech synthesis API to speak the result text
             window.speechSynthesis.speak(utterance);
-
         });
         var volumeSlider = document.querySelector('.volume-slider');
         var volumeUpButton = document.getElementById('volumeUp');
@@ -234,7 +256,6 @@
         volumeUpButton.addEventListener('click', function () {
             if (volumeSlider.value < 100) {
                 volumeSlider.value = parseInt(volumeSlider.value) + 10; // Increase volume by 10
-
             }
         });
         // Function to decrease volume
