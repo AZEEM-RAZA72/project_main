@@ -1,0 +1,34 @@
+<script>
+    function generateText() {
+        // Replace this with your own text generation logic
+        return "This is a generated text. Please repeat after me.";
+    }
+
+    // Function to speak out the generated text
+    function speakText(text) {
+        // Replace this with your own text-to-speech logic
+        console.log("Speaking: " + text);
+        // In a real implementation, you would use a text-to-speech API or library
+        // to speak out the generated text.
+    }
+
+    function handleRepetition() {
+        var generatedText = generateText();
+
+        // Speak out the generated text
+        speakText(generatedText);
+
+        // Prompt the user to repeat
+        var userResponse = prompt("Please repeat the text you just heard:");
+
+        // Display the generated text and user's response
+        var container = document.getElementById("container");
+        container.innerHTML = "<p>Generated Text:</p><p>" + generatedText + "</p>" +
+            "<p>Your Response:</p><p>" + userResponse + "</p>";
+    }
+
+    // Call handleRepetition function when the page loads
+    window.onload = function () {
+        handleRepetition();
+    };
+</script>

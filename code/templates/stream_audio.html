@@ -1,0 +1,36 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<h1>Home</h1>
+
+<iframe src="/stream_audio" id="textout"></iframe>
+<div id="cleanout">
+
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+    let cleanout = document.querySelector('#cleanout')
+    let iframe = document.querySelector('#textout')
+    function updateCleanout(){
+        try {
+            const out = iframe.contentWindow.document.querySelector('pre')
+            const preContent =out.textContent
+            const jsonArray = `[${preContent.replace(/}{/g, '},{')}]`;
+            const values = JSON.parse(jsonArray).map(obj => obj.text);
+            const concatenatedString = values.join(' ');
+
+            // Log the concatenated string
+            iframe.style.display = 'none'
+            console.log(concatenatedString);
+            cleanout.textContent = concatenatedString
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    updateCleanout()
+    // Set up an interval to update every 5 seconds
+    setInterval(updateCleanout, 1000);
+</script>
+{% endblock %}

@@ -67,6 +67,7 @@ def setup_recording(filename=None, device=None, samplerate=None, model_lang="en-
 @app.route('/stream_audio')
 def stream_audio():
     print('Starting audio stream')
+    print()
     return Response(setup_recording(), content_type='text/event-stream')
 
 @app.route('/')

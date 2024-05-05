@@ -3,11 +3,19 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color:  #68e98c78;
 }
 
 .container {
     width: 80%;
     margin: 0 auto;
+}
+.container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: xx-large;
+    color: #385f38;
+    font-family: comic sans ms;
 }
 
 /* Header styles */
@@ -24,10 +32,11 @@ header {
 }
 
 .logo {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: bold;
-    color: #333;
-    text-decoration: none;
+    font-family: comic sans ms;
+    color: #385f38; 
+    text-decoration: none ;
 }
 
 /* .nav-links {
@@ -46,8 +55,9 @@ header {
     list-style: none; /* Remove default bullet points */
     margin-right: 30; /* Reset default margins */
     padding: 10; /* Reset default padding */
-    display: inline-block; /* Enable flexbox for easy alignment */
+    /* display: inline-block; */ /* Enable flexbox for easy alignment */
     float: right; /* Align items to the right */
+
   }
   
   .nav-links li {
@@ -59,11 +69,12 @@ header {
 }
 
 .cta-button {
-    background-color: #006df0;
+    background-color: #385f38;
     color: #e4efe2;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .cta-button:hover {
@@ -72,14 +83,17 @@ header {
 
 /* Hero section styles */
 .hero {
-    background-image: '/static/speaking_people.jpg';
     background-size: cover;
-    color: #aeeb69;
-    padding: 100px 0;
+    color: #385f38;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
 }
 
 .hero-content {
     text-align: center;
+    font-family: comic sans ms;
+    background-color: #a4eda4;
+    padding: 50px 0;
 }
 
 .hero-content h1 {
@@ -88,8 +102,10 @@ header {
 }
 
 .hero-content p {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     margin-bottom: 40px;
+    font-family: comic sans ms;
+
     
 }
 
@@ -108,9 +124,16 @@ header {
     align-items: center;
     margin-bottom: 40px;
 }
+.feature p {
+    text-indent: 10px;
+    text-align: left;
+}
 
 .feature img {
     margin-right: 20px;
+    max-height: 150px;
+    max-width: 150px;
+    
 }
 
 /* Footer styles */
@@ -124,8 +147,7 @@ footer {
     display: flex; /* Use flexbox to align items in a row */
     justify-content: space-around; /* Space evenly between the images */
     align-items: center; /* Center items vertically */
-    background-image: ;
-}
+    margin-top: 20px; /* Add some space at the top */}
 
 .img-rounded {
     border-radius: 50%; /* Make images round */

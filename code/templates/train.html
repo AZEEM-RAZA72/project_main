@@ -12,24 +12,24 @@
     <style>
         /* Global Styles */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: comic sam ms;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #68e98c78;
         }
 
         .container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #a4eda48f;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 10px rgb(0, 0, 0);
         }
 
         h1 {
             text-align: center;
-            color: #64f864;
+            color: #040101;
             margin-bottom: 20px;
         }
 
@@ -62,7 +62,7 @@
 
         .step h2 {
             margin-bottom: 15px;
-            color: #64f864;
+            color: #040101;
         }
 
         /* Textarea and Input */
@@ -78,13 +78,41 @@
             font-size: 16px;
         }
 
+        .text_bg {
+            /*  background-color: #228cf6;
+            position: absolute;
+            top: 0;
+            padding: 10px;
+            height: 100%;
+            width: 200%; */
+            background-color: #a4eda4;
+            /* Change this to any color you desire */
+            padding: 10px;
+            /* Add padding for better visual appearance */
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            /* Set the width of the text background to match the container */
+        }
+
+        #generate-button {
+            background-color: #385f38;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
         /* Round Play Button */
         #playButton {
             border-radius: 50%;
             width: 40px;
             height: 40px;
             font-size: 20px;
-            background-color: #007bff;
+            background-color: #385f38;
             color: white;
             border: none;
             cursor: pointer;
@@ -93,7 +121,7 @@
         }
 
         #playButton:hover {
-            background-color: #0056b3;
+            background-color: #385f38;
         }
 
         /* Audio Controls */
@@ -102,6 +130,7 @@
             align-items: center;
             margin-top: 10px;
             display: flex;
+            color: #385f38;
             /* Changed display property to flex */
         }
 
@@ -109,11 +138,12 @@
             width: 150px;
             margin-left: 10px;
             flex: 1;
+            color: #385f38;
         }
 
         /* Next Button */
         #nextButton {
-            background-color: #64f864;
+            background-color: #385f38;
             color: white;
             border: none;
             border-radius: 5px;
@@ -123,7 +153,7 @@
         }
 
         #nextButton:hover {
-            background-color: #64f864;
+            background-color: #f86664;
         }
 
         /* Option Menu */
@@ -131,7 +161,7 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 2px solid #007bff;
+            border: 2px solid #385f38;
             border-radius: 5px;
             box-sizing: border-box;
             font-size: 16px;
@@ -163,9 +193,12 @@
         <a href="#">About</a>
     </div>
     <div class="container">
-        <h1>Start HERE!</h1>
+        <h1>
+            <div class="text_bg"> Start HERE!</div>
+        </h1>
         <form hx-post="/train" hx-target="body" hx-swap="innerHTML" hx-indicator="#spinner">
             <img id="spinner" class="htmx-indicator" src="/static/bouncing-circles.svg" />
+            <input type="hidden" name="lang" value="{{session.lang}}" />
             <select id="optionMenu" name="chapter">
                 <option value="introduction">Introducing Yourself </option>
                 <option value="greetings">Greetings</option>
@@ -173,7 +206,7 @@
                 <option value="apologies">Making Apologies</option>
                 <option value="thankyou">Thank You</option>
             </select>
-            <input type="submit" value="Generate">
+            <input type="submit" value="Generate" id="generate-button">
         </form>
         <div class="step">
             <h2> Generated Text</h2>
@@ -188,15 +221,22 @@
                 <button id="volumeUp">+</button>
             </div>
         </div>
+        <!-- start speaking -->
+        <div class="speak_action">
+            <button id="practice-now" class="btn btn-danger">
+                <i class="fa fa-microphone"></i>
+                Your Turn to practice this
+            </button>
+        </div>
         <div class="step">
             <h2> User Input</h2>
             <textarea id="userInput"></textarea>
         </div>
         <div class="step">
             <h2> Correction Box</h2>
-            <div id="correctionBox" contenteditable="true"></div>
+            <div id="correctionBox"></div>
         </div>
-        <div class="next-button">
+        <div>
             <button id="nextButton">Next</button>
         </div>
     </div>
@@ -204,7 +244,22 @@
     <script>
         var converter = new showdown.Converter();
         var resultArea = document.querySelector('.result')
+        var practiceNow = document.getElementById('practice-now');
+        var userInput = document.getElementById('userInput');
+        var volumeSlider = document.querySelector('.volume-slider');
+        var volumeUpButton = document.getElementById('volumeUp');
+        var volumeDownButton = document.getElementById('volumeDown');
+        var correctionBox = document.getElementById('correctionBox');
+        var originalContextBox = document.querySelector('.lead.result')
+        var nextButton = document.getElementById('nextButton');
+        var optionMenu = document.getElementById('optionMenu');
         var content = ""
+        var is_practice = false;
+        var is_practice_completed = false;
+
+        // disable the practice button and user input
+        practiceNow.disabled = true;
+        userInput.disabled = true;
 
         // Function to extract content from specific tag
         function extractContent(tagName) {
@@ -236,6 +291,8 @@
 
         // Add an event listener to the play button
         playButton.addEventListener('click', function () {
+            var lang = `{{session.lang_code}}`;
+            console.log(`Language selected: ${lang}`);
             console.log("loading content")
             // Cancel any previously speaking
             content = extractContent('p')
@@ -244,13 +301,85 @@
             console.log(content)
             // Iterate over the NodeList of .result element
             // Create a new SpeechSynthes isUtterance object with the result text
-            var utterance = new SpeechSynthesisUtterance(content);
-            // Use the speech synthesis API to speak the result text
-            window.speechSynthesis.speak(utterance);
+            const utterance = new SpeechSynthesisUtterance;
+            utterance.text = content;
+            utterance.voice = speechSynthesis.getVoices().filter(function (voice) {
+                return voice.lang == lang;
+            })[0];
+            console.log(utterance.voice)
+            // Speak the text and enable the practice button when done
+            speechSynthesis.speak(utterance);
+            utterance.onend = function () {
+                practiceNow.disabled = false;
+                userInput.disabled = false;
+
+            }
+            utterance.onerror = function () {
+                console.error("An error occurred while speaking");
+                practiceNow.disabled = false;
+                userInput.disabled = false;
+            }
         });
-        var volumeSlider = document.querySelector('.volume-slider');
-        var volumeUpButton = document.getElementById('volumeUp');
-        var volumeDownButton = document.getElementById('volumeDown');
+
+
+        // Function to speak the user input
+        practiceNow.addEventListener('click', function (event) {
+            is_practice_completed = false;
+            const recognition = new webkitSpeechRecognition();
+            recognition.lang = `{{session.lang_code}}`;
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.start();
+            is_practice = true;
+            recognition.onresult = function (event) {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0])
+                    .map(result => result.transcript)
+                    .join('');
+                console.log(transcript);
+                userInput.textContent = transcript;
+                if (event.results[0].isFinal) {
+                    recognition.stop();
+                    userInput.textContent += ". 🎙️";
+                    is_practice = false;
+                    is_practice_completed = true;
+                    suggestCorrections();
+                }
+            }
+        });
+
+        // Function to run when practice is completed
+        suggestCorrections = function () {
+            if (is_practice_completed) {
+                console.log("Practice completed")
+                var userText = userInput.value;
+                var originalText = originalContextBox.textContent;
+                correction_url = "/api/correction"
+                post_data = {
+                    "original_text": originalText,
+                    "spoken_text": userText
+                }
+                if (userText.trim() === originalText.trim()) {
+                    correctionBox.innerHTML = "🎉 Great job! You got it right! 🎉";
+                } else {
+                    // send as form data
+                    fetch(correction_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(post_data)
+                    }).then(
+                        response => response.json()
+                    ).then(data => {
+                        console.log(data);
+                        correctionBox.innerHTML = data['result'];
+                    }).catch(error => {
+                        console.error("Error:", error);
+                    });
+                }
+            }
+        }
 
         // Function to increase volume
         volumeUpButton.addEventListener('click', function () {
@@ -266,6 +395,22 @@
         });
         volumeSlider.addEventListener('input', function () {
             audioElement.volume = volumeSlider.value / 100; // Convert the slider value to a value between 0 and 1
+        });
+
+        // store the selected option in local storage
+        optionMenu.addEventListener('change', function () {
+            var selectedOption = optionMenu.value;
+            localStorage.setItem('selectedOption', selectedOption);
+        });
+
+
+        //  simulate click on generate button
+        nextButton.addEventListener('click', function () {
+            // set the selected option to the previous selected option
+            var selectedOption = localStorage.getItem('selectedOption');
+            optionMenu.value = selectedOption;
+            
+            document.querySelector('#generate-button').click();
         });
     </script>
 </body>
