@@ -7,6 +7,142 @@
     <title>LinguaEase</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dummy_style.css') }}">
 </head>
+<style>
+    /* Global styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Use Roboto font for better readability */
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8; /* Light gray background */
+}
+
+.container {
+    width: 90%; /* Increase container width for better readability */
+    margin: 0 auto;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem; /* Adjust heading font size */
+    color: #333; /* Dark gray color for headings */
+}
+
+/* Header styles */
+header {
+    background-color: #68e98c; /* Green background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333; /* Dark gray color for logo */
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links li {
+    display: inline;
+    margin-left: 20px; /* Add spacing between nav items */
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #333; /* Dark gray color for links */
+    font-weight: bold;
+}
+
+.cta-button {
+    background-color: #68e98c; /* Green button background color */
+    color: #fff; /* White text color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cta-button:hover {
+    background-color: #5cbf7e; /* Darker green on hover */
+}
+
+/* Hero section styles */
+.hero {
+    background-size: cover;
+    color: #333; /* Dark gray color for text */
+    padding-top: 100px; /* Increase padding for better spacing */
+    padding-bottom: 100px;
+}
+
+.hero-content {
+    text-align: center;
+    background-color: #fff; /* White background */
+    padding: 50px 0;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-content h3 {
+    font-size: 1.5rem; /* Adjust font size */
+    margin-bottom: 40px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center; /* Center align images */
+    align-items: center;
+    margin-top: 20px;
+}
+
+.img-rounded {
+    border-radius: 50%;
+    width: 150px; /* Increase image size */
+    height: 150px;
+    margin: 0 15px; /* Add spacing between images */
+}
+
+.icon span {
+    display: block;
+    font-size: 1.2rem; /* Adjust font size */
+}
+
+/* Features section styles */
+.features {
+    background-color: #f8f8f8; /* Light gray background */
+    padding: 100px 0;
+}
+
+.features h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.feature p {
+    text-align: left; /* Align text to left */
+}
+
+</style>
 
 <body>
     <header>

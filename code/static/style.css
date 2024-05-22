@@ -62,6 +62,7 @@ header {
   
   .nav-links li {
     margin-left: 30px; /* Add spacing between list items */
+    margin-right: 30px; /* Add spacing between list items */
   }
 .nav-links li a {
     text-decoration: none;

@@ -1,0 +1,325 @@
+/* Global styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Changed font to Roboto */
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9; /* Light gray background */
+}
+
+.container {
+    width: 90%; /* Increased width */
+    margin: 0 auto;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem; /* Adjusted font size */
+    color: #333; /* Darkened text color */
+    font-family: 'Roboto', sans-serif; /* Changed font */
+}
+
+/* Header styles */
+header {
+    background-color: #fff; /* White background */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333; /* Darkened text color */
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    margin-right: 0; /* Reset margin */
+    padding: 0; /* Reset padding */
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #666;
+}
+
+.cta-button {
+    background-color: #007bff; /* Blue button */
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.cta-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Hero section styles */
+/* Global styles */
+body {
+    font-family: 'Roboto', sans-serif; /* Change font family */
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7; /* Light background */
+}
+
+.container {
+    width: 90%; /* Adjusted width */
+    margin: 0 auto;
+}
+
+.container h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 32px; /* Adjusted font size */
+    color: #2c3e50; /* Dark text color */
+    font-family: 'Roboto', sans-serif; /* Change font family */
+}
+
+/* Header styles */
+header {
+    background-color: #34495e; /* Dark header background */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 2rem; /* Adjusted font size */
+    font-weight: bold;
+    color: #ffffff; /* Light text color */
+    text-decoration: none;
+}
+
+.nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    float: right;
+}
+
+.nav-links li {
+    display: inline-block; /* Display horizontally */
+    margin-left: 30px; /* Adjusted margin */
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #ffffff; /* Light text color */
+}
+
+.cta-button {
+    background-color: #2ecc71; /* Green button */
+    color: #ffffff; /* Light text color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease; /* Smooth hover transition */
+    float: right; /* Align button to the right */
+}
+
+.cta-button:hover {
+    background-color: #27ae60; /* Darker green on hover */
+}
+
+/* Hero section styles */
+.hero {
+   /*  background-image: url('/static/ai_generated.png'); */ /* Replace with your hero background image */
+    opacity: .8;
+    background-size: cover;
+    color: #110f0f; /* Light text color */
+    padding-top: 100px; /* Increased padding */
+    padding-bottom: 100px; /* Increased padding */
+}
+
+.hero-content {
+   /*  background-color: rgba(52, 73, 94, 0.7); */  /* Semi-transparent background */
+    padding: 50px;
+    border-radius: 10px;
+    color: black;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-content h3 {
+    font-size: 1.5rem; /* Adjusted font size */
+    margin-bottom: 40px;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.icon {
+    text-align: center;
+    margin: 0 20px; /* Adjusted margin */
+}
+
+.icon span {
+    display: block;
+    margin-top: 10px; /* Adjusted margin */
+    font-size: 16px; /* Adjusted font size */
+}
+
+.icon img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    border: 2px solid #ffffff; /* White border */
+    transition: transform 0.3s ease; /* Smooth hover transition */
+}
+
+.icon img:hover {
+    transform: scale(1.1); /* Scale up on hover */
+}
+
+/* Features section styles */
+.features {
+    padding: 100px 0;
+    background-color: #ecf0f1; /* Light background */
+}
+
+.features h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #2c3e50; /* Dark text color */
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.feature img {
+    margin-right: 20px;
+    max-width: 100px; /* Adjusted max-width */
+    max-height: 100px; /* Adjusted max-height */
+    border-radius: 50%;
+    border: 2px solid #2ecc71; /* Green border */
+}
+
+.feature h3 {
+    font-size: 1.5rem; /* Adjusted font size */
+    margin-bottom: 10px;
+}
+
+.feature p {
+    font-size: 1rem; /* Adjusted font size */
+}
+
+/* Footer styles */
+footer {
+    background-color: #34495e; /* Dark footer background */
+    padding: 20px 0;
+    text-align: center;
+    color: #ffffff; /* Light text color */
+    margin-top: 50px;
+}
+
+/* Additional animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    animation: fadeIn 1s ease-in-out;
+}
+
+
+.hero-content {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.hero-content h1 {
+    font-size: 3.5rem; /* Increased font size */
+    margin-bottom: 20px;
+}
+
+.hero-content h3 {
+    font-size: 1.5rem; /* Adjusted font size */
+    margin-bottom: 40px;
+}
+
+/* Features section styles */
+.features {
+    padding: 100px 0;
+}
+
+.features h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.feature p {
+    text-align: left;
+}
+
+.feature img {
+    margin-right: 20px;
+    max-width: 150px;
+}
+
+/* Footer styles */
+footer {
+    background-color: #333; /* Dark background */
+    color: #fff; /* Light text color */
+    padding: 20px 0;
+    text-align: center;
+}
+
+.image-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.img-rounded {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+}
+
+.icon span {
+    display: block;
+    font-size: 14px; /* Added unit */
+}

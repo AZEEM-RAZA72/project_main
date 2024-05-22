@@ -6,8 +6,8 @@ genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
 def query(question, lang):
     prompt = f'''
     The question is {question}
-    Now generate 100 words paragraph example sentences in {lang} to introduce yourself.
-    Ensure the sentences are clear and meaningful, avoiding any use of placeholders special characters.
+    Now generate general paragraph example sentences in {lang}around 50 words dont exceed.
+    Ensure the sentences are structured in format, clear and meaningful, avoiding any use of placeholders special characters.
     Autofill the placeholder with random values.
     format=<!Doctype HTML>
     '''
@@ -53,6 +53,7 @@ def correction_api(original, spoken):
     prompt = f'''
     You are my grammar teacher. I have spoken the following text: "{spoken.strip()}".
     please match the spoken text with the original text: "{original.strip()}".
+    highlight mention: fluency score, accuracy score and pronunciation score
     and provide me tips on how to improve my grammar.
     also give me a score on how well I did out of 10.
     display the result in the following format:
