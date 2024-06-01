@@ -104,6 +104,7 @@ def register():
 
 @app.route('/train', methods=['GET', 'POST'])
 def train():
+    chapter = ''
     if 'isauth' not in session or not session.get('isauth'):
         return redirect('/login')
     if request.method == 'POST':
@@ -112,13 +113,13 @@ def train():
         print(chapter, lang)
         result = query(chapter, lang)
         print(result.text)
-        return render_template('train.html', result=result.text)
+        return render_template('train.html', result=result.text, chapter=chapter)
 
     lang = request.args.get('lang','american_english')
     session['lang'] = lang
     session['lang_code'] = lang_dict.get(lang.lower())
     print(lang)
-    return render_template('train.html')
+    return render_template('train.html', chapter=chapter)
 
 @app.route('/api/correction', methods=['POST'])
 def correction():

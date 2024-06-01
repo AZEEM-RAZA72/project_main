@@ -197,11 +197,11 @@ textarea,
             <img id="spinner" class="htmx-indicator" src="/static/bouncing-circles.svg" />
             <input type="hidden" name="lang" value="{{session.lang}}" />
             <select id="optionMenu" name="chapter">
-                <option value="how to introduce oneself">Introducing Yourself </option>
-                <option value="greeting sentences">Greetings</option>
-                <option value="saying goodbye">Saying Goodbye</option>
-                <option value="making apologies">Making Apologies</option>
-                <option value="how to thankyou">Thank You</option>
+                <option value="how to introduce oneself" {% if chapter == 'how to introduce oneself' %} selected {% endif %}>Introducing Yourself </option>
+                <option value="greeting sentences" {% if chapter == 'greeting sentences' %} selected {% endif %}>Greetings</option>
+                <option value="saying goodbye" {% if chapter == 'saying goodbye' %} selected {% endif %}>Saying Goodbye</option>
+                <option value="making apologies" {% if chapter == 'making apologies' %} selected {% endif %}>Making Apologies</option>
+                <option value="how to thankyou" {% if chapter == 'how to thankyou' %} selected {% endif %}>Thank You</option>
             </select>
             <input type="submit" value="Generate" id="generate-button">
         </form>

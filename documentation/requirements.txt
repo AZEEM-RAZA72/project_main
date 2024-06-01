@@ -1,9 +1,10 @@
 flask
 sqlalchemy
-flask 
 sounddevice 
 vosk
 langid
 nltk
 language_tool_python
 happytransformer
+google.generativeai
+myllm
